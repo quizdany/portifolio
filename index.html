@@ -187,7 +187,7 @@
 <section id="projects">
   <div class="head-row">
     <h2>Selected Work</h2>
-    <p>Six projects with public code: RAG and LLM applications, data pipelines, data quality and machine learning.</p>
+    <p>Six projects with public code: RAG and LLM applications, risk modeling, data pipelines and data quality.</p>
   </div>
   
   <div class="project">
@@ -204,11 +204,11 @@
   <div class="project">
     <div class="p-left">
       <div class="p-index">02 / Data Engineering</div>
-      <h3>Weather Lakehouse: ETL Pipeline with Quality Gates</h3>
-      <div class="p-tags"><span>Python</span><span>DuckDB</span><span>Parquet</span><span>PostgreSQL</span><span>Docker</span><span>GitHub Actions</span></div>
-      <div class="p-links"><a href="https://github.com/quizdany/data-engineering-portfolio" target="_blank">Code →</a><a href="https://github.com/quizdany/data-engineering-portfolio/blob/main/docs/architecture.md" target="_blank">Architecture notes →</a></div>
+      <h3>Weather Lakehouse: Governed ETL Pipeline</h3>
+      <div class="p-tags"><span>Python</span><span>DuckDB</span><span>PostgreSQL</span><span>Data catalog</span><span>Lineage</span><span>CI</span></div>
+      <div class="p-links"><a href="https://github.com/quizdany/data-engineering-portfolio" target="_blank">Code →</a><a href="https://github.com/quizdany/data-engineering-portfolio/blob/main/docs/data_catalog.md" target="_blank">Data catalog →</a></div>
     </div>
-    <div class="p-right"><p>An end-to-end pipeline that pulls hourly weather data for Kigali, Nairobi, Lagos, Cape Town and Accra from a public API. Raw responses are kept for audit and replay, then the data moves through bronze, silver and gold layers into a dimensional model with daily marts and anomaly metrics.</p><p>A written data contract sets the rules for every column. Automated quality gates check row counts, uniqueness and valid ranges, and stop the run when data breaks them. Runs are idempotent, the code is tested in CI, and Docker adds PostgreSQL and S3-compatible storage for a fuller platform.</p>
+    <div class="p-right"><p>An end-to-end pipeline that pulls hourly weather data for Kigali, Nairobi, Lagos, Cape Town and Accra from a public API. Raw responses are kept for audit and replay, then the data moves through bronze, silver and gold layers into a dimensional model with daily marts and anomaly metrics.</p><p>Quality gates check row counts, uniqueness and valid ranges, stop the run when data breaks them, and record every result for monitoring. A data catalog with a business glossary documents every table and column, lineage is generated from the SQL, and a check fails the build if any column is undocumented. Gold marts are published to PostgreSQL in one transaction, with primary keys on each grain and catalog descriptions as column comments.</p>
       <div class="metric-box"><div class="m-title">Pipeline layers</div><div class="flow"><span>Public API</span><i>→</i><span>Raw JSON</span><i>→</i><span>Bronze Parquet</span><i>→</i><span>Silver tables</span><i>→</i><span>Gold marts</span><i>→</i><span>Quality gate</span></div><div class="source-note">Checks: non-empty facts · unique city + timestamp · temperature, humidity and precipitation ranges</div></div>
     </div>
   </div>
@@ -236,23 +236,23 @@
   </div>
   <div class="project">
     <div class="p-left">
-      <div class="p-index">05 / Machine Learning Engineering</div>
-      <h3>Reproducible ML Pipeline with a Model Card</h3>
-      <div class="p-tags"><span>scikit-learn</span><span>Pipelines</span><span>Hyperparameter search</span><span>pytest</span><span>CI</span></div>
-      <div class="p-links"><a href="https://github.com/quizdany/data-science-portifolio" target="_blank">Code →</a><a href="https://github.com/quizdany/data-science-portifolio/blob/main/docs/model_card.md" target="_blank">Model card →</a></div>
+      <div class="p-index">05 / Risk Modeling</div>
+      <h3>Credit Default Risk Model</h3>
+      <div class="p-tags"><span>scikit-learn</span><span>Gradient boosting</span><span>Calibration</span><span>PSI drift</span><span>Fairness audit</span></div>
+      <div class="p-links"><a href="https://github.com/quizdany/data-science-portifolio" target="_blank">Code →</a><a href="https://github.com/quizdany/data-science-portifolio/blob/main/docs/credit_risk/model_card.md" target="_blank">Model card →</a></div>
     </div>
-    <div class="p-right"><p>A packaged classification project that shows how I take a model from notebook to something others can rerun and audit: one preprocessing pipeline, cross-validated hyperparameter search, saved model artifacts and a command-line tool for predictions.</p><p>Evaluation goes beyond accuracy, with macro F1, a confusion matrix and feature importance. A model card records intended use and limits, and unit tests run on every commit.</p>
-      <div class="metric-box"><div class="m-title">What ships with the model</div><ul class="check-list"><li><b>01</b>Versioned preprocessing and model pipeline</li><li><b>02</b>Metrics, confusion matrix and feature importance reports</li><li><b>03</b>Model card with intended use and limitations</li><li><b>04</b>Unit tests and continuous integration</li></ul></div>
+    <div class="p-right"><p>Predicts the probability that a loan applicant defaults, using real data on 1,000 applicants. An interpretable logistic regression is compared with gradient boosting under cross-validation, and the winner is calibrated so a score of 0.3 really means a 30% risk.</p><p>Approving a borrower who defaults costs five times more than rejecting one who would repay, so the approval threshold is set to minimise expected cost, not at the usual 0.5. Sex, age and foreign-worker status are kept out of the model and used only to audit outcomes by group, and the Population Stability Index flags drift in scores and inputs.</p>
+      <div class="metric-box"><div class="m-title">Expected cost per applicant · held-out test</div><div class="bar-row"><span class="label">Approve everyone</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-val">1.50</span></div><div class="bar-row"><span class="label">Model at 0.5</span><div class="bar-track"><div class="bar-fill" style="width:60%"></div></div><span class="bar-val">0.90</span></div><div class="bar-row"><span class="label">Cost-based cut-off</span><div class="bar-track"><div class="bar-fill" style="width:33.6%"></div></div><span class="bar-val">0.50</span></div><div class="source-note">ROC-AUC 0.81 · Gini 0.63 · KS 0.53 · lower cost is better</div></div>
     </div>
   </div>
   <div class="project">
     <div class="p-left">
       <div class="p-index">06 / Economic Data</div>
-      <h3>Rwanda Development Indicators Warehouse (2000–2023)</h3>
-      <div class="p-tags"><span>PostgreSQL</span><span>SQL</span><span>CTEs</span><span>Window functions</span><span>Tableau</span></div>
-      <div class="p-links"><a href="https://github.com/quizdany/dataAnalysisPortifolio" target="_blank">Code →</a><a href="https://alhafizabaka.wixsite.com/my-site-1/post/data-cleaning-project-1" target="_blank">Write-up →</a></div>
+      <h3>Rwanda Development Indicators Warehouse</h3>
+      <div class="p-tags"><span>PostgreSQL</span><span>Constraints</span><span>Data quality checks</span><span>Window functions</span><span>CI</span></div>
+      <div class="p-links"><a href="https://github.com/quizdany/dataAnalysisPortifolio/tree/main/development-indicators-sql" target="_blank">Code →</a><a href="https://alhafizabaka.wixsite.com/my-site-1/post/data-cleaning-project-1" target="_blank">Write-up →</a></div>
     </div>
-    <div class="p-right"><p>Two decades of Rwanda's economic, demographic, education and health indicators — including GDP growth, GDP per capita and inflation — modeled as related tables in PostgreSQL.</p><p>Views built with CTEs and window functions compute growth rates and trends once, so the Tableau dashboard reads clean, consistent numbers instead of recalculating them.</p>
+    <div class="p-right"><p>Twenty-four years of Rwanda's economic, demographic, education and health indicators, including GDP growth and inflation, modeled in PostgreSQL. Primary keys and CHECK constraints reject bad data at load time, and blocking quality checks verify complete, gap-free series.</p><p>Views built with CTEs and window functions compute growth rates and trends once, so the Tableau dashboard reads clean, consistent numbers instead of recalculating them.</p>
       <div class="metric-box"><div class="m-title">Warehouse tables</div><ul class="check-list"><li><b>01</b>Economic: GDP growth, GDP per capita, inflation</li><li><b>02</b>Demographic: population, urbanisation</li><li><b>03</b>Education and health indicators</li><li><b>04</b>Dashboard-ready views for trend analysis</li></ul></div>
     </div>
   </div>
